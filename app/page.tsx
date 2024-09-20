@@ -1,100 +1,138 @@
-import Image from "next/image";
+"use client";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { SendHorizontal } from "lucide-react";
+import { VscGithubAlt } from "react-icons/vsc";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [regex, setRegex] = useState("");
+  const [selectValue, setSelectValue] = useState("nfa");
+  const [isLoading, setIsLoading] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="flex flex-col min-h-screen">
+      {/* Top input */}
+      <div className="p-4 bg-secondary">
+        <div className="flex gap-2 max-w-md mx-auto w-full">
+          <Input
+            placeholder="Enter regular expression..."
+            className="flex-1"
+            value={regex}
+            onChange={(e) => {
+              setRegex(e.target.value);
+            }}
+            disabled={isLoading}
+          />
+          <Button size="icon" disabled={isLoading || !regex.trim()}>
+            <SendHorizontal className="h-4 w-4" />
+          </Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </div>
+
+      {/* Main content */}
+      <div className="flex flex-col lg:flex-row flex-1 p-4 gap-4 overflow-hidden">
+        {/* Left panel */}
+        <div className="w-full lg:w-1/3 flex flex-col gap-4 overflow-auto">
+          {/* Symbols */}
+          <div className="flex-1 overflow-auto">
+            <h2 className="font-bold text-center">Symbols</h2>
+            <p className="text-xl text-center">
+              &Sigma; = {"{"}
+              {"}"}
+            </p>
+          </div>
+          {/* States table */}
+          <div className="flex-1 overflow-auto">
+            <h2 className="font-bold text-center">States</h2>
+            <Table>
+              <TableHeader>
+                <TableRow></TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow></TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        {/* Right panel */}
+        <div className="w-full lg:w-2/3 flex flex-col mt-4 lg:mt-0">
+          <Select value={selectValue} onValueChange={setSelectValue}>
+            <SelectTrigger className="w-full mb-4">
+              <SelectValue placeholder="Select an option"></SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="nfa">
+                Nondeterministic Finite Automaton (NFA)
+              </SelectItem>
+              <SelectItem value="udfa">
+                Unoptimized Deterministic Finite Automaton (uDFA)
+              </SelectItem>
+              <SelectItem value="mdfa">
+                Minimised Deterministic Finite Automaton (mDFA)
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Graph */}
+          <div className="flex-1 bg-secondary rounded-lg mb-4 p-4 overflow-auto min-h-[200px] lg:min-h-0">
+            {isLoading ? <></> : <></>}
+          </div>
+
+          {/* Testing area */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Input
+              className="flex-1"
+              placeholder="Enter a string to test with the automaton..."
+            />
+            <Button className="w-full sm:w-auto">Test</Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-secondary p-4 mt-auto">
+        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+          <p className="text-sm text-muted-foreground text-center sm:text-left">
+            :3
+          </p>
+          <div className="flex items-center space-x-4">
+            <a
+              href="https://github.com/davnpsh/automata"
+              target="_blank"
+              className="text-muted-foreground hover:text-primary"
+            >
+              <VscGithubAlt className="h-5 w-5" />
+              <span className="sr-only">GitHub</span>
+            </a>
+            <a
+              href="https://www.npmjs.com/package/@davnpsh/automata"
+              target="_blank"
+              className="text-sm text-muted-foreground hover:text-primary"
+            >
+              npm
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
   );
