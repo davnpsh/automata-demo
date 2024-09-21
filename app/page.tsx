@@ -159,6 +159,9 @@ export default function Home() {
                 cy={(cy: Cytoscape.Core) => {
                   cyRef.current = cy;
                 }}
+                boxSelectionEnabled={false}
+                minZoom={2}
+                maxZoom={4}
               />
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500 select-none">
