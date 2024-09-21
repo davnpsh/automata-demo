@@ -21,12 +21,59 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+
+import Cytoscape from "cytoscape";
+import CytoscapeComponent from "react-cytoscapejs";
+import dagre from "cytoscape-dagre";
+import {
+  mDFA,
+  uDFA,
+  NFA,
+  cytoscape_styles,
+  cytoscape_layout,
+} from "@davnpsh/automata";
+import { runSimulation } from "@/lib/utils";
+
+Cytoscape.use(dagre);
 
 export default function Home() {
+  const cyRef = useRef<Cytoscape.Core | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [regex, setRegex] = useState("");
   const [selectValue, setSelectValue] = useState("nfa");
-  const [isLoading, setIsLoading] = useState(false);
+  const [automata, setAutomata] = useState(null);
+  const [testString, setTestString] = useState("");
+  const [testResult, setTestResult] = useState(null);
+
+  const handleRegex = () => {
+    setIsLoading(true);
+    // API call
+    setTimeout(() => {
+      switch (selectValue) {
+        case "nfa":
+          setAutomata(new NFA(regex));
+          break;
+        case "udfa":
+          setAutomata(new uDFA(regex));
+          break;
+        case "mdfa":
+          setAutomata(new mDFA(regex));
+          break;
+      }
+      setIsLoading(false);
+    }, 1000); // Just to show loading animation
+  };
+
+  const handleTest = () => {
+    if (!automata) return;
+
+    const result = automata.test(testString);
+
+    runSimulation(cyRef, result).then(() => {
+      console.log("Animation done!");
+    });
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -42,7 +89,11 @@ export default function Home() {
             }}
             disabled={isLoading}
           />
-          <Button size="icon" disabled={isLoading || !regex.trim()}>
+          <Button
+            size="icon"
+            onClick={handleRegex}
+            disabled={isLoading || !regex.trim()}
+          >
             <SendHorizontal className="h-4 w-4" />
           </Button>
         </div>
@@ -95,16 +146,45 @@ export default function Home() {
 
           {/* Graph */}
           <div className="flex-1 bg-secondary rounded-lg mb-4 p-4 overflow-auto min-h-[200px] lg:min-h-0">
-            {isLoading ? <></> : <></>}
+            {isLoading ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+              </div>
+            ) : automata ? (
+              <CytoscapeComponent
+                elements={automata.cytograph()}
+                style={{ width: "100%", height: "100%" }}
+                stylesheet={cytoscape_styles}
+                layout={cytoscape_layout}
+                cy={(cy: Cytoscape.Core) => {
+                  cyRef.current = cy;
+                }}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full text-gray-500 select-none">
+                Enter a regular expression on the top
+              </div>
+            )}
           </div>
 
           {/* Testing area */}
           <div className="flex flex-col sm:flex-row gap-2">
-            <Input
-              className="flex-1"
-              placeholder="Enter a string to test with the automaton..."
-            />
-            <Button className="w-full sm:w-auto">Test</Button>
+            <div className="flex-1">
+              <Input
+                placeholder="Enter a string to test with the automaton..."
+                value={testString}
+                onChange={(e) => {
+                  setTestString(e.target.value);
+                }}
+              />
+            </div>
+            <Button
+              className="w-full sm:w-auto"
+              onClick={handleTest}
+              disabled={isLoading}
+            >
+              Test
+            </Button>
           </div>
         </div>
       </div>
