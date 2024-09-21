@@ -21,6 +21,13 @@ export function runSimulation(
       accept = result.accept,
       routes = result.routes;
 
+    const sequences: any[] = [];
+    buildSequences();
+    highlightSequences();
+
+    /**
+     * Builds a list of sequences of states and edges
+     */
     function buildSequences(): void {
       // Build a sequence
       for (const route of routes) {
@@ -54,13 +61,12 @@ export function runSimulation(
       }
     }
 
-    const sequences: any[] = [];
-    buildSequences();
-
+    /**
+     * Highlights the sequences of states and edges
+     */
     function highlightSequences() {
       let delay = 0;
       const highlightDuration = 500; // Duration for each highlight
-      let totalDuration = 0;
 
       // Remove previous styles
       cy.elements().removeStyle();
@@ -68,25 +74,6 @@ export function runSimulation(
       sequences.forEach((sequence: any[], seqIndex: any) => {
         sequence.forEach((element, elemIndex) => {
           setTimeout(() => {
-            // Remove highlight from previous element
-            if (elemIndex > 0) {
-              sequence[elemIndex - 1].removeStyle();
-            }
-
-            // Highlight current element
-            element.animate(
-              {
-                style: {
-                  "background-color": "orange",
-                  "line-color": "orange",
-                  "target-arrow-color": "orange",
-                },
-              },
-              {
-                duration: 100,
-              },
-            );
-
             // If it's the last element of the last sequence and accept is true
             if (
               seqIndex === sequences.length - 1 &&
@@ -105,31 +92,40 @@ export function runSimulation(
                   duration: 0,
                 },
               );
-            } else if (elemIndex === sequence.length - 1) {
-              // Remove highlight from last element of sequence after a delay
+              //
+              // Highlight current element
+            } else {
+              element.animate(
+                {
+                  style: {
+                    "background-color": "orange",
+                    "line-color": "orange",
+                    "target-arrow-color": "orange",
+                  },
+                },
+                {
+                  duration: 100,
+                },
+              );
+
               setTimeout(() => {
                 element.removeStyle();
               }, highlightDuration);
             }
 
             // If it's the last element of the last sequence
-            // Resolve the promise
+            // Resolve the promise when all animations are complete
             if (
               seqIndex === sequences.length - 1 &&
               elemIndex === sequence.length - 1
             ) {
-              setTimeout(() => {
-                resolve(); // Resolve the promise when all animations are complete
-              }, highlightDuration);
+              resolve();
             }
           }, delay);
 
           delay += highlightDuration;
         });
-        totalDuration = delay;
       });
     }
-
-    highlightSequences();
   });
 }
