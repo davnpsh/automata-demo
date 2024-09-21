@@ -43,6 +43,7 @@ export default function Home() {
   const [regex, setRegex] = useState("");
   const [selectValue, setSelectValue] = useState("nfa");
   const [automata, setAutomata] = useState(null);
+  const [animating, setAnimating] = useState(false);
   const [testString, setTestString] = useState("");
   const [testResult, setTestResult] = useState(null);
 
@@ -69,10 +70,16 @@ export default function Home() {
     if (!automata) return;
 
     const result = automata.test(testString);
+    //setTestResult(result);
 
-    runSimulation(cyRef, result).then(() => {
-      console.log("Animation done!");
-    });
+    // Start animation process
+    setAnimating(true);
+    // Timeout to fix weird bug
+    setTimeout(() => {
+      runSimulation(cyRef, result).then(() => {
+        setAnimating(false);
+      });
+    }, 100);
   };
 
   return (
@@ -184,7 +191,7 @@ export default function Home() {
             <Button
               className="w-full sm:w-auto"
               onClick={handleTest}
-              disabled={isLoading}
+              disabled={isLoading || animating}
             >
               Test
             </Button>

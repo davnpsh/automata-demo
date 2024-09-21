@@ -89,7 +89,7 @@ export function runSimulation(
                   },
                 },
                 {
-                  duration: 0,
+                  duration: 100,
                 },
               );
               //
