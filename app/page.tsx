@@ -1,5 +1,6 @@
 "use client";
 
+import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SendHorizontal, Check, X } from "lucide-react";
@@ -46,6 +47,7 @@ export default function Home() {
   const [animating, setAnimating] = useState(false);
   const [testString, setTestString] = useState("");
   const [stringAccepted, setStringAccepted] = useState<boolean | null>(null);
+  const { toast } = useToast();
 
   // Handle
   useEffect(() => {
@@ -65,18 +67,28 @@ export default function Home() {
     setIsLoading(true);
     // API call
     setTimeout(() => {
-      switch (selectValue) {
-        case "nfa":
-          setAutomata(new NFA(regex));
-          break;
-        case "udfa":
-          setAutomata(new uDFA(regex));
-          break;
-        case "mdfa":
-          setAutomata(new mDFA(regex));
-          break;
+      try {
+        switch (selectValue) {
+          case "nfa":
+            setAutomata(new NFA(regex));
+            break;
+          case "udfa":
+            setAutomata(new uDFA(regex));
+            break;
+          case "mdfa":
+            setAutomata(new mDFA(regex));
+            break;
+        }
+      } catch (e: Error) {
+        setAutomata(null);
+        toast({
+          variant: "destructive",
+          title: "Error on user input:",
+          description: e.message,
+        });
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }, 1000); // Just to show loading animation
   };
 
