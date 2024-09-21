@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SendHorizontal } from "lucide-react";
+import { SendHorizontal, Check, X } from "lucide-react";
 import { VscGithubAlt } from "react-icons/vsc";
 import {
   Select,
@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import Cytoscape from "cytoscape";
 import CytoscapeComponent from "react-cytoscapejs";
@@ -45,9 +45,23 @@ export default function Home() {
   const [automata, setAutomata] = useState(null);
   const [animating, setAnimating] = useState(false);
   const [testString, setTestString] = useState("");
-  const [testResult, setTestResult] = useState(null);
+  const [stringAccepted, setStringAccepted] = useState<boolean | null>(null);
+
+  // Handle
+  useEffect(() => {
+    if (stringAccepted === null && cyRef.current) {
+      cyRef.current.elements().removeStyle();
+    }
+  }, [stringAccepted]);
+
+  // Handle automaton generaton on Select change
+  useEffect(() => {
+    if (!regex) return;
+    handleRegex();
+  }, [selectValue]);
 
   const handleRegex = () => {
+    setStringAccepted(null);
     setIsLoading(true);
     // API call
     setTimeout(() => {
@@ -68,9 +82,9 @@ export default function Home() {
 
   const handleTest = () => {
     if (!automata) return;
+    setStringAccepted(null);
 
     const result = automata.test(testString);
-    //setTestResult(result);
 
     // Start animation process
     setAnimating(true);
@@ -78,6 +92,7 @@ export default function Home() {
     setTimeout(() => {
       runSimulation(cyRef, result).then(() => {
         setAnimating(false);
+        setStringAccepted(result.accept);
       });
     }, 100);
   };
@@ -94,12 +109,12 @@ export default function Home() {
             onChange={(e) => {
               setRegex(e.target.value);
             }}
-            disabled={isLoading}
+            disabled={isLoading || animating}
           />
           <Button
             size="icon"
             onClick={handleRegex}
-            disabled={isLoading || !regex.trim()}
+            disabled={isLoading || animating || !regex.trim()}
           >
             <SendHorizontal className="h-4 w-4" />
           </Button>
@@ -179,14 +194,32 @@ export default function Home() {
 
           {/* Testing area */}
           <div className="flex flex-col sm:flex-row gap-2">
-            <div className="flex-1">
+            <div className="relative flex-1">
               <Input
                 placeholder="Enter a string to test with the automaton..."
                 value={testString}
                 onChange={(e) => {
                   setTestString(e.target.value);
+                  setStringAccepted(null);
                 }}
+                disabled={isLoading || animating}
+                className={
+                  stringAccepted === true
+                    ? "border-green-500 border-4"
+                    : stringAccepted === false
+                      ? "border-red-500 border-4"
+                      : ""
+                }
               />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                {stringAccepted === true ? (
+                  <Check className="text-green-500" />
+                ) : stringAccepted === false ? (
+                  <X className="text-red-500" />
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
             <Button
               className="w-full sm:w-auto"
