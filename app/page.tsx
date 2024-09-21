@@ -12,15 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
+import Symbols from "@/components/ownui/Symbols";
+import TransitionsTable from "@/components/ownui/Transitions";
 
 import { useState, useRef, useEffect } from "react";
 
@@ -138,25 +132,9 @@ export default function Home() {
         {/* Left panel */}
         <div className="w-full lg:w-1/3 flex flex-col gap-4 overflow-auto">
           {/* Symbols */}
-          <div className="flex-1 overflow-auto">
-            <h2 className="font-bold text-center">Symbols</h2>
-            <p className="text-xl text-center">
-              &Sigma; = {"{"}
-              {"}"}
-            </p>
-          </div>
+          {automata ? <Symbols automata={automata} /> : <></>}
           {/* States table */}
-          <div className="flex-1 overflow-auto">
-            <h2 className="font-bold text-center">States</h2>
-            <Table>
-              <TableHeader>
-                <TableRow></TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow></TableRow>
-              </TableBody>
-            </Table>
-          </div>
+          {automata ? <TransitionsTable automata={automata} /> : <></>}
         </div>
 
         {/* Right panel */}
