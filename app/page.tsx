@@ -93,8 +93,9 @@ export default function Home() {
     if (!automata) return;
     setStringAccepted(null);
 
+    let result;
     try {
-      const result = automata.test(testString);
+      result = automata.test(testString);
     } catch (e: Error) {
       toast({
         variant: "destructive",
