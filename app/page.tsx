@@ -215,6 +215,10 @@ export default function Home() {
                   maxZoom={4}
                   wheelSensitivity={0.1}
                 />
+                <p className="absolute bottom-5 left-5 text-sm text-gray-500">
+                  In some cases, the edges may overlap. To fix this, just drag
+                  and drop the nodes to the location desired.
+                </p>
               </>
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500 select-none">
