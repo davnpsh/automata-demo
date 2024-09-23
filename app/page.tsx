@@ -213,6 +213,7 @@ export default function Home() {
                   boxSelectionEnabled={false}
                   minZoom={1}
                   maxZoom={4}
+                  wheelSensitivity={0.1}
                 />
               </>
             ) : (
