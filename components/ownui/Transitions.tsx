@@ -51,7 +51,13 @@ export default function TransitionsTable({ automata }: TransitionsTableProps) {
                       key={symbolIndex}
                       className="text-md text-center"
                     >
-                      {transition.transitions.get(symbol)}
+                      {Array.isArray(transition.transitions.get(symbol))
+                        ? transition.transitions.get(symbol).length > 1
+                          ? "{" +
+                            transition.transitions.get(symbol).join(", ") +
+                            "}"
+                          : transition.transitions.get(symbol)
+                        : transition.transitions.get(symbol)}
                     </TableCell>
                   );
                 } else {

@@ -90,7 +90,16 @@ export function StatesTablemDFA({ automata }: StatesTableProps) {
             ([label, identicals]: unknown) => (
               <li key={label} className="text-md">
                 <span className="font-bold">{label}</span> is identical to{" "}
-                {Array.from(identicals).join(", ")}
+                {Array.from(identicals).map((identical, index, array) => (
+                  <>
+                    <span key={index} className="font-bold">
+                      {identical}
+                    </span>
+                    {index < array.length - 2 && ", "}
+                    {index === array.length - 2 && " and "}
+                  </>
+                ))}
+                .
               </li>
             ),
           )}
