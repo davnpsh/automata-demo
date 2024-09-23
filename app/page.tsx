@@ -187,7 +187,7 @@ export default function Home() {
           </Select>
 
           {/* Graph */}
-          <div className="flex-1 bg-secondary rounded-lg mb-4 p-4 overflow-auto min-h-[200px] lg:min-h-0 relative">
+          <div className="flex-1 bg-secondary rounded-lg mb-4 p-4 overflow-auto min-h-[500px] lg:min-h-0 relative">
             {isLoading ? (
               <div className="flex items-center justify-center h-full">
                 <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
@@ -215,9 +215,9 @@ export default function Home() {
                   maxZoom={4}
                   wheelSensitivity={0.1}
                 />
-                <p className="absolute bottom-5 left-5 text-sm text-gray-500">
+                <p className="absolute bottom-5 left-5 text-sm text-gray-500 select-none">
                   In some cases, the edges may overlap. To fix this, just drag
-                  and drop the nodes to the location desired.
+                  and drop the nodes until you see all of the edges.
                 </p>
               </>
             ) : (
@@ -271,7 +271,14 @@ export default function Home() {
       <footer className="bg-secondary p-4 mt-auto">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
           <p className="text-sm text-muted-foreground text-center sm:text-left">
-            :3
+            Made by{" "}
+            <a
+              href="https://github.com/davnpsh"
+              className="hover:underline"
+              target="_blank"
+            >
+              davnpsh
+            </a>
           </p>
           <div className="flex items-center space-x-4">
             <a
