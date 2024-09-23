@@ -15,6 +15,7 @@ import {
 
 import Symbols from "@/components/ownui/Symbols";
 import TransitionsTable from "@/components/ownui/Transitions";
+import { StatesTablemDFA, StatesTableuDFA } from "@/components/ownui/States";
 
 import { useState, useRef, useEffect } from "react";
 
@@ -130,11 +131,15 @@ export default function Home() {
       {/* Main content */}
       <div className="flex flex-col lg:flex-row flex-1 p-4 gap-4 overflow-hidden">
         {/* Left panel */}
-        <div className="w-full lg:w-1/3 flex flex-col gap-4 overflow-auto">
+        <div className="w-full lg:w-1/3 flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-200px)] lg:max-h-[calc(100vh-136px)]">
           {/* Symbols */}
           {automata ? <Symbols automata={automata} /> : <></>}
-          {/* States table */}
+          {/* Transitions table */}
           {automata ? <TransitionsTable automata={automata} /> : <></>}
+          {/* States table of uDFA */}
+          {automata ? <StatesTableuDFA automata={automata} /> : <></>}
+          {/* States table of mDFA */}
+          {automata ? <StatesTablemDFA automata={automata} /> : <></>}
         </div>
 
         {/* Right panel */}
@@ -172,7 +177,7 @@ export default function Home() {
                   cyRef.current = cy;
                 }}
                 boxSelectionEnabled={false}
-                minZoom={2}
+                minZoom={1}
                 maxZoom={4}
               />
             ) : (

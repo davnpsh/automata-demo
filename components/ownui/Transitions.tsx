@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -24,14 +23,16 @@ export default function TransitionsTable({ automata }: TransitionsTableProps) {
   }
 
   return (
-    <div className="flex-1 overflow-auto">
-      <h2 className="font-bold text-center">Transitions</h2>
+    <div className="flex-none">
+      <h2 className="font-bold text-center text-xl">Transitions</h2>
       <Table className="select-none">
         <TableHeader>
           <TableRow>
-            <TableHead className="font-bold text-center">State</TableHead>
+            <TableHead className="font-bold text-center text-lg">
+              State
+            </TableHead>
             {symbols.map((symbol, _) => (
-              <TableHead key={_} className="font-bold text-center">
+              <TableHead key={_} className="font-bold text-center text-lg">
                 {symbol}
               </TableHead>
             ))}
@@ -40,7 +41,7 @@ export default function TransitionsTable({ automata }: TransitionsTableProps) {
         <TableBody>
           {Array.from(automata.transitions.table).map((transition, index) => (
             <TableRow key={index}>
-              <TableCell className="text-xl text-center">
+              <TableCell className="text-md text-center">
                 {transition.label}
               </TableCell>
               {symbols.map((symbol, symbolIndex) => {
@@ -48,7 +49,7 @@ export default function TransitionsTable({ automata }: TransitionsTableProps) {
                   return (
                     <TableCell
                       key={symbolIndex}
-                      className="text-xl text-center"
+                      className="text-md text-center"
                     >
                       {transition.transitions.get(symbol)}
                     </TableCell>
@@ -57,7 +58,7 @@ export default function TransitionsTable({ automata }: TransitionsTableProps) {
                   return (
                     <TableCell
                       key={symbolIndex}
-                      className="text-xl text-center"
+                      className="text-md text-center"
                     >
                       -
                     </TableCell>
