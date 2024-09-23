@@ -3,7 +3,7 @@
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SendHorizontal, Check, X } from "lucide-react";
+import { SendHorizontal, Check, X, Image, Download } from "lucide-react";
 import { VscGithubAlt } from "react-icons/vsc";
 import {
   Select,
@@ -18,6 +18,8 @@ import TransitionsTable from "@/components/ownui/Transitions";
 import { StatesTablemDFA, StatesTableuDFA } from "@/components/ownui/States";
 
 import { useState, useRef, useEffect } from "react";
+
+import html2canvas from "html2canvas";
 
 import Cytoscape from "cytoscape";
 import CytoscapeComponent from "react-cytoscapejs";
@@ -113,6 +115,20 @@ export default function Home() {
     }, 100);
   };
 
+  const captureAutomaton = () => {
+    const automaton = document.getElementById("automaton");
+
+    html2canvas(automaton).then((canvas) => {
+      const image = canvas
+        .toDataURL("image/png")
+        .replace("image/png", "image/octet-stream");
+      const link = document.createElement("a");
+      link.download = "automaton.png";
+      link.href = image;
+      link.click();
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Top input */}
@@ -171,24 +187,34 @@ export default function Home() {
           </Select>
 
           {/* Graph */}
-          <div className="flex-1 bg-secondary rounded-lg mb-4 p-4 overflow-auto min-h-[200px] lg:min-h-0">
+          <div className="flex-1 bg-secondary rounded-lg mb-4 p-4 overflow-auto min-h-[200px] lg:min-h-0 relative">
             {isLoading ? (
               <div className="flex items-center justify-center h-full">
                 <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
               </div>
             ) : automata ? (
-              <CytoscapeComponent
-                elements={automata.cytograph()}
-                style={{ width: "100%", height: "100%" }}
-                stylesheet={cytoscape_styles}
-                layout={cytoscape_layout}
-                cy={(cy: Cytoscape.Core) => {
-                  cyRef.current = cy;
-                }}
-                boxSelectionEnabled={false}
-                minZoom={1}
-                maxZoom={4}
-              />
+              <>
+                <Button
+                  className="absolute z-10 right-5 top-5"
+                  size="icon"
+                  onClick={captureAutomaton}
+                >
+                  <Download className="h-5 w-5" />
+                </Button>
+                <CytoscapeComponent
+                  id="automaton"
+                  elements={automata.cytograph()}
+                  style={{ width: "100%", height: "100%" }}
+                  stylesheet={cytoscape_styles}
+                  layout={cytoscape_layout}
+                  cy={(cy: Cytoscape.Core) => {
+                    cyRef.current = cy;
+                  }}
+                  boxSelectionEnabled={false}
+                  minZoom={1}
+                  maxZoom={4}
+                />
+              </>
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500 select-none">
                 Enter a regular expression on the top
