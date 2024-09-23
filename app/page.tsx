@@ -91,7 +91,16 @@ export default function Home() {
     if (!automata) return;
     setStringAccepted(null);
 
-    const result = automata.test(testString);
+    try {
+      const result = automata.test(testString);
+    } catch (e: Error) {
+      toast({
+        variant: "destructive",
+        title: "Error on user input:",
+        description: e.message,
+      });
+      return;
+    }
 
     // Start animation process
     setAnimating(true);
