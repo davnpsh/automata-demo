@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Asterisk, MoveRight } from "lucide-react";
 
 interface TransitionsTableProps {
   automata: object;
@@ -42,7 +43,18 @@ export default function TransitionsTable({ automata }: TransitionsTableProps) {
           {Array.from(automata.transitions.table).map((transition, index) => (
             <TableRow key={index}>
               <TableCell className="text-md text-center">
-                {transition.label}
+                <span className="relative">
+                  <span className="absolute -left-14 flex">
+                    {transition.label == automata.initial_state.label && (
+                      <MoveRight className="h-4 w-4" />
+                    )}
+                    {automata.accept_states.some(
+                      (state) => state.label == transition.label,
+                    ) && <Asterisk className="h-4 w-4" />}
+                  </span>
+
+                  {transition.label}
+                </span>
               </TableCell>
               {symbols.map((symbol, symbolIndex) => {
                 if (transition.transitions.has(symbol)) {
