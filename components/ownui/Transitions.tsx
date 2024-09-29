@@ -23,6 +23,8 @@ export default function TransitionsTable({ automata }: TransitionsTableProps) {
     symbols = automata.regexp.symbols.concat(automata.empty_symbol);
   }
 
+  console.log(automata.transitions.table);
+
   return (
     <div className="flex-none">
       <h2 className="font-bold text-center text-xl">Transitions</h2>
