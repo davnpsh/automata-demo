@@ -67,13 +67,13 @@ export default function Home() {
       try {
         switch (selectValue) {
           case "nfa":
-            setAutomata(new NFA(regex));
+            setAutomata(new NFA(regex, { empty_symbol: "&" }));
             break;
           case "udfa":
-            setAutomata(new uDFA(regex));
+            setAutomata(new uDFA(regex, { empty_symbol: "&" }));
             break;
           case "mdfa":
-            setAutomata(new mDFA(regex));
+            setAutomata(new mDFA(regex, { empty_symbol: "&" }));
             break;
         }
       } catch (e: Error) {
