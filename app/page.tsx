@@ -232,7 +232,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="relative flex-1">
               <Input
-                placeholder="Enter a string to test with the automaton..."
+                placeholder="Enter a string to test with the automaton or leave blank to enter an empty string..."
                 value={testString}
                 onChange={(e) => {
                   setTestString(e.target.value);
