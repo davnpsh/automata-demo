@@ -170,7 +170,7 @@ export default function Home() {
 
         {/* Right panel */}
         <div className="w-full lg:w-2/3 flex flex-col mt-4 lg:mt-0">
-          <Select value={selectValue} onValueChange={setSelectValue}>
+          <Select value={selectValue} onValueChange={setSelectValue} disabled={isLoading || animating}>
             <SelectTrigger className="w-full mb-4">
               <SelectValue placeholder="Select an option"></SelectValue>
             </SelectTrigger>
@@ -279,6 +279,27 @@ export default function Home() {
               target="_blank"
             >
               davnpsh
+            </a>{", "}
+            <a
+              href="https://github.com/K3nnyZY"
+              className="hover:underline"
+              target="_blank"
+            >
+              K3nnyZY
+            </a>{", "}
+            <a
+              href="https://github.com/Rcgil30"
+              className="hover:underline"
+              target="_blank"
+            >
+               Rcgil30
+            </a>{" and "}
+            <a
+              href="https://github.com/FiboDev"
+              className="hover:underline"
+              target="_blank"
+            >
+              FiboDev
             </a>
           </p>
           <div className="flex items-center space-x-4">
